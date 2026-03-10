@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>LuckyX - Daily 100 Box Draw</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <style>
     :root {
       --primary: #0f172a;
@@ -22,22 +22,28 @@
       background: radial-gradient(circle at top, #1e293b, #020617);
       color: #e5e7eb;
       min-height: 100vh;
+      overflow-x: hidden;
+      -webkit-text-size-adjust: 100%;
     }
+    
+    /* ===== NAVIGATION - MOBILE OPTIMIZED ===== */
     nav {
       position: sticky;
       top: 0;
-      z-index: 20;
-      background: rgba(15, 23, 42, .96);
+      z-index: 100;
+      background: rgba(15, 23, 42, .98);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 10px 22px;
+      padding: 12px 16px;
       border-bottom: 1px solid rgba(148, 163, 184, .3);
       backdrop-filter: blur(16px);
+      flex-wrap: wrap;
+      gap: 10px;
     }
     .logo {
       font-weight: 900;
-      font-size: 1.5rem;
+      font-size: 1.3rem;
       color: #f9fafb;
     }
     .logo span {
@@ -48,8 +54,10 @@
     }
     nav ul {
       display: flex;
-      gap: 18px;
+      gap: 8px;
       list-style: none;
+      flex-wrap: wrap;
+      justify-content: center;
     }
     nav a {
       color: #cbd5e1;
@@ -58,6 +66,8 @@
       padding: 6px 10px;
       border-radius: 8px;
       transition: all 0.25s ease;
+      font-size: 0.9rem;
+      white-space: nowrap;
     }
     nav a:hover, nav a.active {
       color: #fff;
@@ -67,34 +77,57 @@
       background: linear-gradient(135deg, var(--accent), #ea580c);
       color: white;
       border: none;
-      padding: 8px 18px;
+      padding: 8px 14px;
       border-radius: 99px;
       font-weight: 600;
       cursor: pointer;
+      font-size: 0.85rem;
+      white-space: nowrap;
     }
-    main { max-width: 1200px; margin: 0 auto; padding: 24px; }
-    .page { display: none; }
-    .page.active { display: block; animation: fadeIn 0.3s ease; }
+    
+    /* ===== MAIN CONTAINER ===== */
+    main { 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      padding: 16px;
+    }
+    .page { display: none; animation: fadeIn 0.3s ease; }
+    .page.active { display: block; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
     
-    /* ===== HERO SECTION ===== */
+    /* ===== HERO SECTION - RESPONSIVE ===== */
     .hero {
       display: grid;
-      grid-template-columns: 1.2fr 0.8fr;
-      gap: 28px;
+      grid-template-columns: 1fr;
+      gap: 20px;
       margin-top: 20px;
     }
-    @media (max-width: 900px) { .hero { grid-template-columns: 1fr; } }
+    @media (min-width: 768px) {
+      .hero {
+        grid-template-columns: 1.2fr 0.8fr;
+      }
+    }
     .hero-main, .hero-side {
       background: linear-gradient(145deg, rgba(30,41,59,0.8), rgba(2,6,23,0.9));
-      padding: 24px;
+      padding: 20px;
       border-radius: var(--radius);
       border: 1px solid rgba(148,163,184,0.2);
     }
+    @media (min-width: 768px) {
+      .hero-main, .hero-side {
+        padding: 24px;
+      }
+    }
     .hero-title {
-      font-size: 2rem;
+      font-size: 1.6rem;
       font-weight: 800;
       margin: 15px 0;
+      line-height: 1.3;
+    }
+    @media (min-width: 768px) {
+      .hero-title {
+        font-size: 2rem;
+      }
     }
     .hero-title span {
       background: linear-gradient(120deg, var(--accent-2), var(--accent-3));
@@ -102,17 +135,20 @@
       background-clip: text;
       color: transparent;
     }
+    .hero-side h3 {
+      text-align: center;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
     
-    /* ===== 🏆 WINNER CARD - BEAUTIFUL DESIGN ===== */
+    /* ===== WINNER CARD - MOBILE RESPONSIVE ===== */
     .winner-card {
       background: linear-gradient(145deg, rgba(30,41,59,0.95), rgba(2,6,23,0.98));
-      border-radius: 20px;
-      padding: 30px 24px;
+      border-radius: 16px;
+      padding: 24px 16px;
       text-align: center;
       border: 2px solid rgba(251,191,36,0.3);
-      box-shadow: 
-        0 0 40px rgba(251,191,36,0.15),
-        inset 0 0 60px rgba(251,191,36,0.05);
+      box-shadow: 0 0 40px rgba(251,191,36,0.15);
       position: relative;
       overflow: hidden;
     }
@@ -135,43 +171,57 @@
       z-index: 1;
     }
     .winner-label {
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 2px;
       color: #94a3b8;
-      margin-bottom: 15px;
+      margin-bottom: 12px;
       font-weight: 600;
     }
     .winner-number-badge {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 90px;
-      height: 90px;
+      width: 75px;
+      height: 75px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--gold), var(--gold-2));
-      box-shadow: 
-        0 0 30px rgba(251,191,36,0.5),
-        0 0 60px rgba(251,191,36,0.3);
-      margin-bottom: 18px;
+      box-shadow: 0 0 30px rgba(251,191,36,0.5);
+      margin-bottom: 15px;
       animation: glow 2s ease-in-out infinite;
     }
+    @media (min-width: 768px) {
+      .winner-number-badge {
+        width: 90px;
+        height: 90px;
+      }
+    }
     @keyframes glow {
-      0%, 100% { box-shadow: 0 0 30px rgba(251,191,36,0.5), 0 0 60px rgba(251,191,36,0.3); }
-      50% { box-shadow: 0 0 50px rgba(251,191,36,0.7), 0 0 80px rgba(251,191,36,0.4); }
+      0%, 100% { box-shadow: 0 0 30px rgba(251,191,36,0.5); }
+      50% { box-shadow: 0 0 50px rgba(251,191,36,0.7); }
     }
     .winner-number {
-      font-size: 2.5rem;
+      font-size: 2rem;
       font-weight: 900;
       color: #1e293b;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    @media (min-width: 768px) {
+      .winner-number {
+        font-size: 2.5rem;
+      }
     }
     .winner-name {
-      font-size: 1.3rem;
+      font-size: 1.1rem;
       font-weight: 600;
       color: #f1f5f9;
-      margin-bottom: 20px;
+      margin-bottom: 15px;
       padding: 0 10px;
+      word-break: break-word;
+    }
+    @media (min-width: 768px) {
+      .winner-name {
+        font-size: 1.3rem;
+      }
     }
     .winner-name.highlight {
       background: linear-gradient(120deg, var(--gold), var(--gold-2));
@@ -180,8 +230,8 @@
       color: transparent;
     }
     .winner-trophy {
-      font-size: 3rem;
-      margin-bottom: 15px;
+      font-size: 2.5rem;
+      margin-bottom: 12px;
       filter: drop-shadow(0 4px 8px rgba(251,191,36,0.4));
       animation: bounce 1s ease-in-out infinite;
     }
@@ -190,7 +240,7 @@
       50% { transform: translateY(-8px); }
     }
     .winner-congrats {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: #86efac;
       font-weight: 500;
       margin-top: 10px;
@@ -212,28 +262,37 @@
       opacity: 0.5;
       animation: none;
     }
-    /* ========================================== */
     
     #todayWinnerHint {
       color: #64748b;
-      font-size: 0.9rem;
-      margin-top: 15px;
+      font-size: 0.85rem;
+      margin-top: 12px;
       display: block;
       text-align: center;
     }
     .hero-side hr {
       border: none;
       border-top: 1px solid rgba(148,163,184,0.3);
-      margin: 20px 0;
+      margin: 15px 0;
     }
+    
+    /* ===== BUTTONS - MOBILE FRIENDLY ===== */
     .btn {
-      padding: 12px 24px;
+      padding: 12px 20px;
       border-radius: 10px;
       font-weight: 600;
       cursor: pointer;
       border: none;
-      font-size: 1rem;
+      font-size: 0.95rem;
       margin: 5px;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    @media (min-width: 768px) {
+      .btn {
+        padding: 12px 24px;
+        font-size: 1rem;
+      }
     }
     .btn-primary {
       background: linear-gradient(135deg, var(--accent-2), #16a34a);
@@ -244,52 +303,94 @@
       border: 2px solid rgba(148,163,184,0.4);
       color: #cbd5e1;
     }
+    .hero-cta {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 15px;
+    }
+    
+    /* ===== STATS - RESPONSIVE GRID ===== */
     .stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin-top: 28px;
+      gap: 12px;
+      margin-top: 24px;
     }
-    @media (max-width: 700px) { .stats { grid-template-columns: 1fr; } }
+    @media (max-width: 480px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
     .stat-card {
       background: rgba(30,41,59,0.6);
-      padding: 18px;
+      padding: 16px 12px;
       border-radius: 12px;
       text-align: center;
       border: 1px solid rgba(148,163,184,0.2);
     }
-    .stat-val { font-size: 1.8rem; font-weight: 800; color: #fff; }
-    .stat-lbl { color: #94a3b8; font-size: 0.95rem; margin-top: 4px; }
+    @media (min-width: 768px) {
+      .stat-card {
+        padding: 18px;
+      }
+    }
+    .stat-val { font-size: 1.5rem; font-weight: 800; color: #fff; }
+    @media (min-width: 768px) {
+      .stat-val { font-size: 1.8rem; }
+    }
+    .stat-lbl { color: #94a3b8; font-size: 0.85rem; margin-top: 4px; }
+    
+    /* ===== PLAY SECTION ===== */
     .play-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
     .player-info {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
       background: rgba(30,41,59,0.7);
-      padding: 12px 20px;
+      padding: 10px 14px;
       border-radius: 12px;
+      flex-wrap: wrap;
+      font-size: 0.9rem;
+    }
+    @media (min-width: 768px) {
+      .player-info {
+        padding: 12px 20px;
+        font-size: 1rem;
+      }
     }
     .player-coins {
       background: linear-gradient(135deg, #fbbf24, #f59e0b);
       color: #1e293b;
-      padding: 4px 12px;
+      padding: 4px 10px;
       border-radius: 99px;
       font-weight: 700;
+      font-size: 0.85rem;
     }
+    
+    /* ===== NUMBER GRID - RESPONSIVE ===== */
     #numberGrid {
       display: grid;
-      grid-template-columns: repeat(10, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       gap: 8px;
       margin-top: 10px;
     }
-    @media (max-width: 700px) { #numberGrid { grid-template-columns: repeat(5, 1fr); } }
+    @media (min-width: 480px) {
+      #numberGrid {
+        grid-template-columns: repeat(7, 1fr);
+      }
+    }
+    @media (min-width: 640px) {
+      #numberGrid {
+        grid-template-columns: repeat(10, 1fr);
+      }
+    }
     .tile {
       aspect-ratio: 1;
       background: rgba(30,41,59,0.7);
@@ -302,8 +403,16 @@
       cursor: pointer;
       transition: all 0.25s ease;
       user-select: none;
+      font-size: 0.95rem;
+      min-height: 45px;
     }
-    .tile:hover { border-color: var(--accent-3); transform: translateY(-3px); }
+    @media (min-width: 768px) {
+      .tile {
+        font-size: 1.1rem;
+        min-height: auto;
+      }
+    }
+    .tile:hover { border-color: var(--accent-3); transform: translateY(-2px); }
     .tile.booked {
       background: rgba(239,68,68,0.2);
       border-color: var(--danger);
@@ -311,51 +420,93 @@
       cursor: not-allowed;
     }
     .tile.booked:hover { transform: none; }
+    
+    /* ===== ADMIN PANEL - MOBILE ===== */
     .admin-panel {
       background: rgba(30,41,59,0.8);
-      padding: 24px;
+      padding: 18px;
       border-radius: var(--radius);
       border: 1px solid rgba(148,163,184,0.2);
-      margin-top: 20px;
+      margin-top: 16px;
+    }
+    @media (min-width: 768px) {
+      .admin-panel {
+        padding: 24px;
+      }
     }
     .admin-row {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       align-items: center;
       flex-wrap: wrap;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
     .admin-row input, .admin-row select {
-      padding: 10px 14px;
+      padding: 10px 12px;
       border-radius: 10px;
       border: 1px solid rgba(148,163,184,0.4);
       background: rgba(2,6,23,0.8);
       color: #fff;
-      font-size: 1rem;
+      font-size: 0.95rem;
+      flex: 1;
+      min-width: 120px;
+    }
+    @media (min-width: 768px) {
+      .admin-row input, .admin-row select {
+        padding: 10px 14px;
+        font-size: 1rem;
+      }
+    }
+    .admin-row .btn {
+      flex-shrink: 0;
+    }
+    
+    /* ===== HISTORY TABLE - SCROLLABLE ===== */
+    .table-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin-top: 16px;
+      border-radius: 12px;
+      border: 1px solid rgba(148,163,184,0.2);
     }
     .history-table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
       background: rgba(30,41,59,0.6);
-      border-radius: 12px;
-      overflow: hidden;
+      min-width: 400px;
     }
     .history-table th, .history-table td {
-      padding: 14px 16px;
+      padding: 12px 14px;
       text-align: left;
       border-bottom: 1px solid rgba(148,163,184,0.2);
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+    @media (min-width: 768px) {
+      .history-table th, .history-table td {
+        padding: 14px 16px;
+        font-size: 1rem;
+      }
     }
     .history-table th {
       background: rgba(15,23,42,0.8);
       font-weight: 600;
       color: #cbd5e1;
     }
+    
+    /* ===== ALERTS ===== */
     .alert {
-      padding: 12px 18px;
+      padding: 12px 16px;
       border-radius: 10px;
       margin-bottom: 16px;
       font-weight: 500;
+      font-size: 0.9rem;
+    }
+    @media (min-width: 768px) {
+      .alert {
+        padding: 12px 18px;
+        font-size: 1rem;
+      }
     }
     .alert-success {
       background: rgba(34,197,94,0.2);
@@ -367,6 +518,13 @@
       color: #fca5a5;
       border: 1px solid rgba(239,68,68,0.4);
     }
+    .alert-info {
+      background: rgba(56,189,248,0.2);
+      color: #bae6fd;
+      border: 1px solid rgba(56,189,248,0.4);
+    }
+    
+    /* ===== MODAL - MOBILE ===== */
     .modal {
       display: none;
       position: fixed;
@@ -374,27 +532,30 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(2,6,23,0.92);
-      z-index: 100;
+      background: rgba(2,6,23,0.95);
+      z-index: 200;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 16px;
     }
     .modal.active { display: flex; }
     .modal-content {
       background: linear-gradient(145deg, #1e293b, #0f172a);
-      padding: 28px;
+      padding: 24px;
       border-radius: var(--radius);
       border: 1px solid rgba(148,163,184,0.3);
       width: 100%;
       max-width: 420px;
+      max-height: 90vh;
+      overflow-y: auto;
     }
-    .modal h3 { margin-bottom: 18px; color: #fff; }
+    .modal h3 { margin-bottom: 18px; color: #fff; font-size: 1.3rem; }
     .form-group { margin-bottom: 16px; }
     .form-group label {
       display: block;
       margin-bottom: 6px;
       color: #cbd5e1;
+      font-size: 0.9rem;
     }
     .form-group input {
       width: 100%;
@@ -403,6 +564,7 @@
       border: 1px solid rgba(148,163,184,0.4);
       background: rgba(2,6,23,0.8);
       color: #fff;
+      font-size: 1rem;
     }
     .modal-actions {
       display: flex;
@@ -417,15 +579,46 @@
       background: none;
       border: none;
       color: #94a3b8;
-      font-size: 1.5rem;
+      font-size: 1.8rem;
       cursor: pointer;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
+    
+    /* ===== FOOTER ===== */
     footer {
       text-align: center;
-      padding: 30px 20px;
+      padding: 24px 16px;
       color: #64748b;
       margin-top: 40px;
       border-top: 1px solid rgba(148,163,184,0.2);
+      font-size: 0.85rem;
+    }
+    footer code {
+      background: rgba(148,163,184,0.2);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+    
+    /* ===== UTILITY ===== */
+    .section-title {
+      margin: 15px 0;
+      color: #f1f5f9;
+      font-size: 1.2rem;
+    }
+    @media (min-width: 768px) {
+      .section-title {
+        font-size: 1.4rem;
+      }
+    }
+    .text-muted {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      line-height: 1.6;
     }
   </style>
 </head>
@@ -438,7 +631,7 @@
       <li><a href="#" data-page="admin" id="navAdmin">Admin</a></li>
       <li><a href="#" data-page="support">Support</a></li>
     </ul>
-    <button id="loginBtn">Login / Register</button>
+    <button id="loginBtn">Login</button>
   </nav>
 
   <main>
@@ -447,22 +640,24 @@
       <div class="hero">
         <div class="hero-main">
           <h1 class="hero-title">Pick <span>your number</span> and watch the reveal.</h1>
-          <p style="color:#94a3b8;margin:15px 0">
+          <p class="text-muted">
             Players choose a number from 1–100 using coins. Admin publishes the winning number daily.
           </p>
-          <button class="btn btn-primary" onclick="switchPage('play')">🎮 Start Playing</button>
+          <div class="hero-cta">
+            <button class="btn btn-primary" onclick="switchPage('play')">🎮 Start Playing</button>
+            <button class="btn btn-outline" onclick="switchPage('support')">❓ How It Works</button>
+          </div>
         </div>
         
-        <!-- 🏆 BEAUTIFUL WINNER CARD -->
         <div class="hero-side">
-          <h3 style="text-align:center;margin-bottom:20px">🏆 Today's Winner</h3>
+          <h3>🏆 Today's Winner</h3>
           <div id="todayWinner" class="winner-card no-winner">
             <div class="winner-card-content">
               <div class="winner-label">Winning Number</div>
               <div class="winner-number-badge">
                 <span class="winner-number" id="winnerNumDisplay">--</span>
               </div>
-              <div class="winner-trophy" id="winnerTrophy">🏆</div>
+              <div class="winner-trophy" id="winnerTrophy">⏳</div>
               <div class="winner-name" id="winnerNameDisplay">No winner published yet</div>
               <div class="winner-congrats" id="winnerCongrats"></div>
             </div>
@@ -498,14 +693,14 @@
         <button class="btn btn-outline" onclick="switchPage('home')">← Back</button>
       </div>
       <div id="playAlert"></div>
-      <h3 style="margin:15px 0;color:#f1f5f9">Select Your Number (10 coins)</h3>
+      <h3 class="section-title">Select Your Number (10 coins)</h3>
       <div id="numberGrid"></div>
     </section>
 
     <!-- ADMIN -->
     <section id="admin" class="page">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-        <h2>⚙️ Admin Panel</h2>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px">
+        <h2 class="section-title" style="margin:0">⚙️ Admin Panel</h2>
         <button class="btn btn-outline" onclick="switchPage('home')">← Back</button>
       </div>
       <div id="adminAlert"></div>
@@ -522,25 +717,27 @@
         <h3 style="margin-bottom:16px">👥 Add Coins</h3>
         <div class="admin-row">
           <input type="text" id="adminUsername" placeholder="Username">
-          <input type="number" id="adminCoins" placeholder="Amount" style="width:120px">
+          <input type="number" id="adminCoins" placeholder="Amount" style="width:100px;flex:0">
           <button class="btn btn-outline" onclick="adminAddCoins()">➕ Add</button>
         </div>
       </div>
       <div class="admin-panel">
         <h3 style="margin-bottom:16px">📜 History</h3>
-        <table class="history-table">
-          <thead>
-            <tr><th>Date</th><th>Number</th><th>Winner</th><th>Tickets</th></tr>
-          </thead>
-          <tbody id="historyBody"></tbody>
-        </table>
+        <div class="table-container">
+          <table class="history-table">
+            <thead>
+              <tr><th>Date</th><th>Number</th><th>Winner</th><th>Tickets</th></tr>
+            </thead>
+            <tbody id="historyBody"></tbody>
+          </table>
+        </div>
       </div>
     </section>
 
     <!-- SUPPORT -->
     <section id="support" class="page">
-      <h2 style="margin-bottom:20px">❓ How to Play</h2>
-      <div style="background:rgba(30,41,59,0.8);padding:24px;border-radius:var(--radius)">
+      <h2 class="section-title">❓ How to Play</h2>
+      <div style="background:rgba(30,41,59,0.8);padding:20px;border-radius:var(--radius)">
         <ol style="padding-left:20px;line-height:1.8">
           <li>Login or Register</li>
           <li>Get coins (50 free on signup)</li>
@@ -575,7 +772,8 @@
   </div>
 
   <footer>
-    <p>🎰 LuckyX Daily Draw • Admin: <code>admin</code> / <code>admin123</code></p>
+    <p>🎰 LuckyX Daily Draw</p>
+    <p style="margin-top:6px">Admin: <code>admin</code> / <code>admin123</code></p>
   </footer>
 
   <script>
@@ -616,6 +814,7 @@
       if (pageId === 'home') renderHome();
       if (pageId === 'play') renderPlay();
       if (pageId === 'admin') renderAdmin();
+      window.scrollTo(0, 0);
     }
 
     function openAuthModal(register) {
@@ -639,7 +838,7 @@
         btn.textContent = 'Logout (' + currentUser.username + ')';
         btn.onclick = logout;
       } else {
-        btn.textContent = 'Login / Register';
+        btn.textContent = 'Login';
         btn.onclick = function() { openAuthModal(false); };
       }
     }
@@ -724,7 +923,6 @@
       setTimeout(function() { el.innerHTML = ''; }, 4000);
     }
 
-    // 🏆 BEAUTIFUL WINNER RENDER
     function renderHome() {
       var winnerCard = document.getElementById('todayWinner');
       var winnerNumDisplay = document.getElementById('winnerNumDisplay');
@@ -734,7 +932,6 @@
       var hintEl = document.getElementById('todayWinnerHint');
 
       if (todayWinNum) {
-        // Winner exists - show beautiful card
         winnerCard.classList.remove('no-winner');
         winnerNumDisplay.textContent = todayWinNum;
         var nameText = todayWinName ? todayWinName : 'No booked player';
@@ -744,7 +941,6 @@
         winnerCongrats.textContent = '🎉 Congratulations!';
         hintEl.textContent = '';
       } else {
-        // No winner - show placeholder
         winnerCard.classList.add('no-winner');
         winnerNumDisplay.textContent = '--';
         winnerNameDisplay.textContent = 'No winner published yet';
@@ -766,7 +962,7 @@
       if (!currentUser) {
         playerNameEl.textContent = 'Not logged in';
         playerCoinsEl.textContent = '0';
-        numberGrid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#94a3b8;padding:20px">Login to play!</p>';
+        numberGrid.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:#94a3b8;padding:40px 20px">Login to play!</p>';
         return;
       }
       var u = users[currentUser.username];
@@ -884,7 +1080,7 @@
       renderHome();
       renderPlay();
       renderAdmin();
-      console.log('✅ LuckyX Loaded - Beautiful Winner Display');
+      console.log('✅ LuckyX Loaded - Mobile Responsive');
     }
     init();
   </script>
